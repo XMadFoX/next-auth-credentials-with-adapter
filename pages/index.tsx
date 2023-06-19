@@ -1,3 +1,4 @@
+import Link from "next/link"
 import Layout from "../components/layout"
 
 export default function IndexPage() {
@@ -8,6 +9,7 @@ export default function IndexPage() {
         This is an example site to demonstrate how to use{" "}
         <a href="https://next-auth.js.org">NextAuth.js</a> for authentication.
       </p>
+      <Link href='/login'>Custom Login Page</Link>
     </Layout>
   )
 }

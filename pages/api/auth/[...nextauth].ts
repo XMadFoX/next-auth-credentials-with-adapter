@@ -1,13 +1,9 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 
 import CredentialsProvider from "next-auth/providers/credentials";
-import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import clientPromise from "../../../lib/mongo";
 // For more information on each option (and a full list of options) go to
 // https://next-auth.js.org/configuration/options
 export const authOptions: NextAuthOptions = {
-  // https://next-auth.js.org/configuration/providers/oauth
-  adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({
       // The name to display on the sign in form (e.g. "Sign in with...")
@@ -17,14 +13,13 @@ export const authOptions: NextAuthOptions = {
       // e.g. domain, username, password, 2FA token, etc.
       // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        id: { label: "Id", type: "text", placeholder: "1" },
       },
       async authorize(credentials, req) {
         // Add logic here to look up the user from the credentials supplied
         const user = { id: "1", name: "J Smith", email: "jsmith@example.com" };
 
-        if (user) {
+        if (req?.body?.id === '1') {
           // Any object returned will be saved in `user` property of the JWT
           return user;
         } else {
@@ -36,6 +31,9 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
     async jwt({ token }) {
       token.userRole = "admin";
